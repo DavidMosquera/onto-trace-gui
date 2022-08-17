@@ -5,6 +5,7 @@ import {BrowserRouter as Router,
 import {OntoTraceMenu} from "./pages/ontotrace";
 import {Login} from "./pages/login";
 import {Projects} from "./pages/projects";
+import {GetArtifactViewOnGraph} from "./components/v1-ontotrace/JsJointArtifactViewer";
 
 export function App(){
         return(
@@ -13,6 +14,7 @@ export function App(){
                     <Route path="/" element={<Login/>}/>
                     <Route path="/v1/onto-trace" element={<OntoTraceMenu/>}/>
                     <Route path="/projects" element = {<Projects/>}/>
+                    <Route path="/tests" element = {<GetArtifactViewOnGraph/>}/>
                 </Routes>
             </Router>
         )

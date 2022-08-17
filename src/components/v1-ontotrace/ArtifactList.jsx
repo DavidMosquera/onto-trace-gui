@@ -1,16 +1,13 @@
 import React, {useState} from 'react';
-import {GetArtifactListItem} from './ArtifactListItem';
+import {GetUserStoryList} from "./UserStoryList";
+import {GetClassDiagramList} from "./ClassDiagramList";
 
-export function GetArtifactList({artifacts, onArtifactChecked}){
-    console.log(artifacts)
+export function GetArtifactList({artifacts, onArtifactChecked, artifactType}){
     if(artifacts!=null){
         return (
-            <div className={"mh-100"} style={{maxHeight:"100%", height : "100%", background:"#f8f7f7"}}>
-                {
-                    artifacts.map((source) => (
-                        <GetArtifactListItem artifact={source} onArtifactChecked={onArtifactChecked}/>
-                    ))
-                }
+            <div style={{maxHeight:"100%", height : "100%", background:"#f8f7f7"}}>
+                {artifactType==="user-stories-sources" && <GetUserStoryList onSeeArtifact={onArtifactChecked}/>}
+                {artifactType==="class-diagram-targets" && <GetClassDiagramList onSeeArtifact={onArtifactChecked}/> }
             </div>
         );
     }

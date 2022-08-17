@@ -24,6 +24,7 @@ export function Login(){
             if(res.ok){
                 res.json().then((response) => {
                         localStorage.setItem("token", response.uuid)
+                        localStorage.setItem("email", response.email)
                         navigate("/projects")
                     }
                 )

@@ -1,20 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-export function GetTracedArtifactListItem({artifact, index, handleUnTrace, setTab, onArtifactChecked}){
+export function GetTracedArtifactListItem({artifact, index, handleUnTrace, setTab, onArtifactChecked, isRequestSent, setIsRequestSent}){
     const onUnTrace = () => {
-        handleUnTrace(artifact)
+        setIsRequestSent(true)
+        handleUnTrace(artifact).then(()=>{
+            setIsRequestSent(false)
+        })
     }
     const seeTab = () => {
         onArtifactChecked(artifact)
-        //setTab(artifact.individualURI)
     }
     return (
         <tr>
             <th scope="row">{index + 1} </th>
-            <td>{artifact.individualName}<button type="button" onClick={seeTab} className="btn btn-link btn-sm m-0">
+            <td>{artifact.individualName.replace(/_/g, " ")}<button type="button" onClick={seeTab} className="btn btn-link btn-sm m-0">
                 <i className="bi bi-eye"></i></button></td>
             <td>
-                <button type="button" onClick={onUnTrace} className="btn btn-danger btn-sm m-0"><i
+                <button type="button" disabled={isRequestSent} onClick={onUnTrace} className="btn btn-danger btn-sm m-0"><i
                     className="bi bi-arrows-angle-expand"></i></button> </td>
         </tr>
     );

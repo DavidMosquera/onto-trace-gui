@@ -1,7 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {GetSuggestedArtifactListItem} from './SuggestedArtifactListItem';
 
-export function  GetSuggestedArtifactList({artifacts, handleOnTrace, setTab, onArtifactChecked}){
+export function  GetSuggestedArtifactList({isLoading, artifacts, handleOnTrace, setTab, onArtifactChecked}){
+    const [isRequestSent, setIsRequestSent] = useState(false);
+    if(isLoading){
+        return(
+        <div className={"row pt-1 ms-0 border border-info"} style={{height: "20vh", maxWidth:"100%", overflow:"auto"}}>
+            <div className="col-md-12">
+                <div className="text-center align-middle" style={{paddingTop:"7vh"}}>
+                    <div className="spinner-grow text-info" role="status">
+                        <span className="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>);
+    }
     if(artifacts.length >0){
         function compare( a, b ) {
             if ( a.similarity < b.similarity ){
@@ -28,7 +41,7 @@ export function  GetSuggestedArtifactList({artifacts, handleOnTrace, setTab, onA
                         <tbody>
                         {
                             artifacts.map((artifact, index) => (
-                               <GetSuggestedArtifactListItem setTab={setTab} index={index} artifact={artifact} handleOnTrace={handleOnTrace} onArtifactChecked={onArtifactChecked}/>
+                               <GetSuggestedArtifactListItem isRequestSent={isRequestSent} setIsRequestSent={setIsRequestSent} setTab={setTab} index={index} artifact={artifact} handleOnTrace={handleOnTrace} onArtifactChecked={onArtifactChecked}/>
                             ))
                         }
                         </tbody>

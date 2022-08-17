@@ -8,19 +8,23 @@ export function OntoTraceMenu(){
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [sourceArtifacts, setSourceArtifacts] = useState([]);
-    const [artifactViewTabs, setArtifactViewTabs] = useState([]);
+    const [artifactViewTabs, setArtifactViewTabs] = useState({id:'',name:'',selected:false,artifact:{}});
     const [targetArtifacts, setTargetArtifacts] = useState([]);
     const [unTracedArtifacts, setUnTracedArtifacts] = useState([]);
+    const projectId = localStorage.getItem("current-project");
+
 
     useEffect(() => {
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/un-traced-sources/id=1")
+        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/un-traced-sources/id="+projectId)
             .then(res => res.json())
             .then(
                 (data) => {
-                    let dataSources = [...unTracedArtifacts];
-                    dataSources = dataSources.concat(data._embedded.sourceList);
+                    if(Object.keys(data).length !== 0){
+                        let dataSources = [...unTracedArtifacts];
+                        dataSources = dataSources.concat(data._embedded.sourceList);
+                        setUnTracedArtifacts(dataSources);
+                    }
                     setIsLoaded(true);
-                    setUnTracedArtifacts(dataSources);
                 },
                 (error) => {
                     setIsLoaded(true);
@@ -30,14 +34,16 @@ export function OntoTraceMenu(){
     }, [])
 
     useEffect(() => {
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/un-traced-targets/id=1")
+        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/un-traced-targets/id="+projectId)
             .then(res => res.json())
             .then(
                 (data) => {
-                    let dataTargets = [...unTracedArtifacts];
-                    dataTargets = dataTargets.concat(data._embedded.targetList);
+                    if(Object.keys(data).length !== 0){
+                        let dataTargets = [...unTracedArtifacts];
+                        dataTargets = dataTargets.concat(data._embedded.targetList);
+                        setUnTracedArtifacts(dataTargets);
+                    }
                     setIsLoaded(true);
-                    setUnTracedArtifacts(dataTargets);
                 },
                 (error) => {
                     setIsLoaded(true);
@@ -47,16 +53,18 @@ export function OntoTraceMenu(){
     }, [])
 
     useEffect( () => {
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/target-artifacts/id=1")
+        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/target-artifacts/id="+projectId)
             .then(res => res.json())
             .then(
                 (data2) => {
+                    if(Object.keys(data2).length !== 0){
+                        // eslint-disable-next-line array-callback-return
+                        data2._embedded.targetList.map((artifact) => {
+                            artifact.selected = false;
+                        })
+                        setTargetArtifacts(data2._embedded.targetList);
+                    }
                     setIsLoaded(true);
-                    // eslint-disable-next-line array-callback-return
-                    data2._embedded.targetList.map((artifact) => {
-                        artifact.selected = false;
-                    })
-                    setTargetArtifacts(data2._embedded.targetList);
                 },
                 (error) => {
                     setIsLoaded(true);
@@ -66,16 +74,18 @@ export function OntoTraceMenu(){
     }, [])
 
     useEffect(() => {
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/source-artifacts/id=1")
+        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/source-artifacts/id="+projectId)
             .then(res => res.json())
             .then(
                 (data2) => {
+                    if(Object.keys(data2).length !== 0){
+                        // eslint-disable-next-line array-callback-return
+                        data2._embedded.sourceList.map((artifact) => {
+                            artifact.selected = false;
+                        })
+                        setSourceArtifacts(data2._embedded.sourceList);
+                    }
                     setIsLoaded(true);
-                    // eslint-disable-next-line array-callback-return
-                    data2._embedded.sourceList.map((artifact) => {
-                        artifact.selected = false;
-                    })
-                    setSourceArtifacts(data2._embedded.sourceList);
                 },
                 (error) => {
                     setIsLoaded(true);
@@ -84,38 +94,11 @@ export function OntoTraceMenu(){
             )
     }, [])
 
-    const onArtifactChecked = (artifact) => {
-        const {individualURI: id, individualName: name} = artifact;
-        if(artifact.selected){
-            const newArtifactViewTabs = artifactViewTabs.filter((tab) => tab.id !== id);
-            setArtifactViewTabs(newArtifactViewTabs)
-            artifact.selected = false;
-        }else{
-            const newArtifactViewTabs = [...artifactViewTabs, {id: id, name: name, selected:false, artifact: artifact}]
-            setArtifactViewTabs(newArtifactViewTabs)
-            artifact.selected = true;
-        }
-    }
-
-    const onSeeArtifact = (artifact) => {
-        let artifactInList = sourceArtifacts.find((source) => source.individualURI === artifact.individualURI);
-        artifactInList = artifactInList === undefined ? targetArtifacts.find((target) => target.individualURI === artifact.individualURI):artifactInList;
-        if(artifactInList.selected){
-            setTab(artifactInList.individualName);
-        }else{
-            const newArtifactViewTabs = [...artifactViewTabs, {id: artifactInList.individualURI, name: artifactInList.individualName, selected:false, artifact: artifactInList}]
-            artifactInList.selected = true;
-            setArtifactViewTabs(newArtifactViewTabs);
-        }
-    }
-
-    const setTab = (id) => {
-        const newTabListState = [...artifactViewTabs];
-        // eslint-disable-next-line array-callback-return
-        newTabListState.map((tab) => {
-            tab.selected = tab.name === id;
-        })
-        setArtifactViewTabs(newTabListState);
+    const onSeeArtifact = (artifactOnSelect) => {
+        let artifactInList = sourceArtifacts.find((source) => source.individualURI === artifactOnSelect.individualURI);
+        artifactInList = artifactInList === undefined ? targetArtifacts.find((target) => target.individualURI === artifactOnSelect.individualURI):artifactInList;
+        const newTab = { id: artifactInList.individualURI, name: artifactInList.individualName, selected:true, artifact: artifactInList};
+        setArtifactViewTabs((tab) => {return newTab});
     }
 
     const updateSourceArtifacts = (artifacts) => {
@@ -125,35 +108,47 @@ export function OntoTraceMenu(){
     if (error) {
         return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
-        return <div>Loading...</div>;
+        return (<div className={"row pt-1 ms-0 border border-info"} style={{height: "100vh", maxWidth:"100%", overflow:"auto"}}>
+            <div className="col-md-12">
+                <div className="text-center align-middle" style={{paddingTop:"45vh"}}>
+                    <div className="spinner-grow text-info" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>);
     } else {
         return(
             <Fragment>
                 <GetNavbar/>
                 <div className={"container-fluid mh-100"} style={{height:"100%", maxHeight:"100%", paddingTop:"0", paddingBottom:"0"}}>
                     <div className={"row"} style={{height:"85vh", maxHeight:"85vh"}}>
-                        <div className={"col-sm-2 mh-100"} style={{background:"#f8f7f7", overflow:"auto", borderBottom:"0.5px solid #a1a1a1"}}>
-                            <div className={"row pt-2 pb-2"} style={{background:"#f8f7f7"}}>
+                        <div className={"col-sm-2 mh-100"} style={{background:"#f8f7f7", borderBottom:"0.5px solid #a1a1a1"}}>
+                            <div className={"row pt-3 pb-2"} style={{background:"#f8f7f7"}}>
                                 <div className={"col-sm-12"}>
                                     <center>
                                         <h5  style = {{background:"#f8f7f7"}}><i className="bi bi-plug-fill"></i> Source artifacts</h5>
                                     </center>
                                 </div>
                             </div>
-                            <GetArtifactList artifacts={sourceArtifacts} onArtifactChecked={onArtifactChecked} setSourceArtifacts={updateSourceArtifacts}/>
+                            <div className={"overflow-auto m-0 p-0"} style={{height:"90%"}}>
+                                <GetArtifactList artifactType={"user-stories-sources"} artifacts={sourceArtifacts} onArtifactChecked={onSeeArtifact} setSourceArtifacts={updateSourceArtifacts}/>
+                            </div>
                         </div>
                         <div className={"col-sm-8 mh-100 pt-2"}>
-                            <GetArtifactView tabList={artifactViewTabs} setTab={setTab} onArtifactChecked={onSeeArtifact}/>
+                            <GetArtifactView tab={artifactViewTabs} onArtifactChecked={onSeeArtifact}/>
                         </div>
                         <div className={"col-sm-2 mh-100"} style={{background:"#f8f7f7", overflow:"auto", borderBottom:"0.5px solid #a1a1a1"}}>
                             <div className={"row pt-2 pb-2"} style={{background:"#f8f7f7"}}>
-                                <div className={"col-sm-12 mh-100"} >
+                                <div className={"col-sm-12 pt-3 mh-100"} >
                                     <center>
                                         <h5  style = {{background:"#f8f7f7"}}><i className="bi bi-outlet"></i> Target artifacts</h5>
                                     </center>
                                 </div>
                             </div>
-                            <GetArtifactList artifacts={targetArtifacts} onArtifactChecked={onArtifactChecked} setSourceArtifacts={updateSourceArtifacts}/>
+                            <div className={"overflow-auto m-0 p-0"} style={{height:"90%"}}>
+                                <GetArtifactList artifactType={"class-diagram-targets"} artifacts={targetArtifacts} onArtifactChecked={onSeeArtifact} setSourceArtifacts={updateSourceArtifacts}/>
+                            </div>
                         </div>
                     </div>
                 </div>

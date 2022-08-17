@@ -1,8 +1,8 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {GetTraceArtifactList} from './TracedArtifactList';
-import {GetSuggestedArtifactList} from './SuggestedArtifactList';
+import {GetArtifactViewerTabContentTabular} from "./ArtifactTraceViewerTabContentTabular";
+import {GetArtifactViewOnGraph} from "./JsJointArtifactViewer";
 
-export function GetTabContent({tab, setTab, onArtifactChecked}){
+export function GetTabContent({tab, onArtifactChecked}){
     const {id, name} = tab;
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -11,8 +11,15 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
     const [showURI, setShowURI] = useState({show:false});
     const suggestedArtifactsQuery = tab.artifact._links.suggestedTargets === undefined ? tab.artifact._links.suggestedSources.href : tab.artifact._links.suggestedTargets.href;
     const tracedArtifactsQuery = tab.artifact._links.tracedTargets === undefined ? tab.artifact._links.tracedSources.href : tab.artifact._links.tracedTargets.href;
+    const projectId = localStorage.getItem("current-project")
+    const [viewType, setViewType] = useState("tabular");
+
+    const [isLoadingTraced, setIsLoadingTraced] = useState(false)
+    const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false)
+
 
     const getSuggestedArtifacts = () => {
+        setIsLoadingSuggestions(true);
         fetch(suggestedArtifactsQuery)
             .then(res => res.json())
             .then(
@@ -22,16 +29,19 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
                     if(data._embedded !== undefined) {
                         suggestedArtifactsREST = data._embedded.targetList === undefined ? data._embedded.sourceList : data._embedded.targetList;
                     }
+                    setIsLoadingSuggestions(false);
                     setSuggestedArtifacts(suggestedArtifactsREST);
                 },
                 (error) => {
                     setIsLoaded(true);
                     setError(error);
+                    setIsLoadingSuggestions(false);
                 }
             )
     }
 
     const getTracedArtifacts = () => {
+        setIsLoadingTraced(true)
         fetch(tracedArtifactsQuery)
             .then(res => res.json())
             .then(
@@ -41,9 +51,11 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
                     if(data._embedded !== undefined) {
                         tracedArtifactsREST = data._embedded.targetList === undefined ? data._embedded.sourceList : data._embedded.targetList;
                     }
+                    setIsLoadingTraced(false)
                     setTracedArtifacts(tracedArtifactsREST);
                 },
                 (error) => {
+                    setIsLoadingTraced(false)
                     setIsLoaded(true);
                     setError(error);
                 }
@@ -52,11 +64,11 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
 
     useEffect( () => {
         getSuggestedArtifacts()
-    }, [])
+    }, [id])
 
     useEffect( () => {
         getTracedArtifacts()
-    }, [])
+    }, [id])
 
     const handleRemoveURIs = () => {
         const newShowURI = {...showURI};
@@ -64,9 +76,9 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
         setShowURI(newShowURI);
     }
 
-    const handleOnTrace = (artifactToTrace) => {
+    const handleOnTrace = async (artifactToTrace) => {
         let traceObject;
-        if(tab.artifact._links.suggestedTargets != undefined){
+        if(tab.artifact._links.suggestedTargets !== undefined){
             traceObject = {
                 hasSource: {
                     individualURI: tab.artifact.individualURI
@@ -85,8 +97,7 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
                 }
             }
         }
-
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/id=1",
+        await fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/id="+projectId,
             {
                 method:"POST",
                 body: JSON.stringify(traceObject),
@@ -95,9 +106,19 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
                 }
             })
             .then(res => res.json())
-            .then((data) => {
-                    getSuggestedArtifacts();
-                    getTracedArtifacts()
+            .then((d1) => {
+                    let newSuggestedArtifacts = []
+                    let newTracedArtifacts = [... tracedArtifacts]
+                    suggestedArtifacts.forEach(
+                        (suggestedArtifact)=>{
+                            if(suggestedArtifact.individualURI!==artifactToTrace.individualURI){
+                                newSuggestedArtifacts.push(suggestedArtifact)
+                            }else{
+                                newTracedArtifacts.push(suggestedArtifact)
+                            }
+                    })
+                    setSuggestedArtifacts(newSuggestedArtifacts);
+                    setTracedArtifacts(newTracedArtifacts);
                 },
                 (error) => {
                     setError(error);
@@ -105,9 +126,9 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
             )
     }
 
-    const handleUnTrace = (artifactToUnTrace) => {
+    const handleUnTrace = async (artifactToUnTrace) => {
         let traceObject;
-        if(tab.artifact._links.suggestedTargets != undefined){
+        if(tab.artifact._links.suggestedTargets !== undefined){
             traceObject = {
                 hasSource: {
                     individualURI: tab.artifact.individualURI
@@ -126,7 +147,7 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
                 }
             }
         }
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/id=1",
+        await fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/id="+projectId,
             {
                 method:"DELETE",
                 body: JSON.stringify(traceObject),
@@ -136,8 +157,15 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
             })
             .then(res => res)
             .then((data) => {
+                    let newTracedArtifacts = []
+                    tracedArtifacts.forEach(
+                        (tracedArtifact)=>{
+                            if(tracedArtifact.individualURI!==artifactToUnTrace.individualURI){
+                                newTracedArtifacts.push(tracedArtifact)
+                            }
+                        })
                     getSuggestedArtifacts();
-                    getTracedArtifacts()
+                    setTracedArtifacts(newTracedArtifacts);
                 },
                 (error) => {
                     setError(error);
@@ -145,7 +173,15 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
             )
     }
 
-    if(tab.selected){
+    const handleOnChangeViewTabularGraphClick = ()=>{
+        if(viewType==="tabular"){
+            setViewType("graph");
+        }else{
+            setViewType("tabular")
+        }
+    }
+
+    if(tab.selected===true){
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
@@ -156,52 +192,20 @@ export function GetTabContent({tab, setTab, onArtifactChecked}){
                      aria-labelledby="nav-home-tab">
                     <div className={"row"}>
                         <div className={"col-sm-12"}>
-                            <h5 className={"d-inline-block"}>Artifact name:</h5> <h5 className={"d-inline-block text-info"}> {tab.artifact.individualName}</h5>
+                            <h5 className={"d-inline-block"}>Artifact name:</h5> <h5 className={"d-inline-block text-info"} style={{maxWidth:"70%"}}> {tab.artifact.individualName.replace(/_/g, " ")}</h5>
+                            {viewType === "graph" && <button className={"pt-0 pb-0 pl-1 pr-1 btn btn-primary d-inline-block"} style={{marginInlineStart:"1em"}}>
+                            <i className="bi bi-file-text" onClick={handleOnChangeViewTabularGraphClick}></i></button>}
+                            {viewType === "tabular" && <button className={"pt-0 pb-0 pl-1 pr-1 btn btn-dark d-inline-block"} style={{marginInlineStart:"1em"}}>
+                                <i className="bi bi-bezier" onClick={handleOnChangeViewTabularGraphClick}></i></button>}
                         </div>
                     </div>
-                    <div className={"row pt-1"}>
-                        <div className={"col-sm-6"}>
-                            <h5 className={"d-inline-block"}>Type:</h5> <h5 className={"d-inline-block text-info"}> {tab.artifact._links.suggestedTargets != undefined ?
-                            <i className="bi bi-plug-fill"> Source artifact</i>:
-                            <i className="bi bi-outlet"> Target artifact</i>
-                            }</h5>
-                        </div>
-                        <div className={"col-sm-6"}>
-                            <h5 className={"d-inline-block"}>Status:</h5> {tracedArtifacts.length === 0 ?<h5 className={"d-inline-block text-danger"}> Un-traced</h5> : <h5 className={"d-inline-block text-success"}> Traced</h5>}
-                        </div>
-                    </div>
-                    <div className={"row pt-3"}>
-                        <div className={"col-sm-12"}>
-                            <h5 className={"d-inline-block"}>Ontology assertions</h5> <input className = {"ms-3"} type={"checkbox"} checked={!showURI.show} onChange={handleRemoveURIs}/> Remove URIs
-                        </div>
-                    </div>
-                    <div className={"row pt-1 ms-0 border border-info text-nowrap"} style={{height: "15vh", maxWidth:"100%", overflow:"auto"}}>
-                        <div className={"col-sm-12"}>
-                            <ul className={"list-unstyled"}>
-                                {
-                                    tab.artifact.statements.map((statement) => (
-                                        <li>{showURI.show === true ? statement : statement.replace(/http([\s\S]*?)#|<|>/g, "")}</li>
-                                    ))
-                                }
-                            </ul>
-                        </div>
-                    </div>
-                    <div className={"row pt-3"}>
-                        <div className={"col-sm-12"}>
-                            <h5>List of suggested {tab.artifact._links.suggestedTargets != undefined ? "target artifacts" : "source artifacts"}</h5>
-                        </div>
-                    </div>
-                    <GetSuggestedArtifactList handleOnTrace={handleOnTrace} artifacts={
-                        suggestedArtifacts.filter(
-                            (suggestedArtifact) => tracedArtifacts.filter((tracedArtifact) => suggestedArtifact.individualURI === tracedArtifact.individualURI).length == 0)
-                    } setTab={setTab} onArtifactChecked={onArtifactChecked}/>
-                    <div className={"row pt-3"}>
-                        <div className={"col-sm-12"}>
-                            <h5>Traced {tab.artifact._links.suggestedTargets != undefined ? "target artifacts" : "source artifacts"}</h5>
-                        </div>
-                    </div>
-                    <GetTraceArtifactList artifacts={tracedArtifacts} handleUnTrace={handleUnTrace} setTab={setTab} onArtifactChecked={onArtifactChecked}/>
-              </div>
+                    {viewType === "tabular" &&
+                        <GetArtifactViewerTabContentTabular isLoadingSuggestions={isLoadingSuggestions} isLoadingTraced={isLoadingTraced} tab={tab} tabId={id} tracedArtifacts={tracedArtifacts} showURI={showURI} handleRemoveURIs={handleRemoveURIs} handleOnTrace={handleOnTrace} suggestedArtifacts={suggestedArtifacts} onArtifactChecked={onArtifactChecked} handleUnTrace={handleUnTrace}/>
+                    }
+                    {viewType === "graph" &&
+                        <GetArtifactViewOnGraph tab={tab}/>
+                    }
+                </div>
             )
         }
     }
