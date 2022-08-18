@@ -3,6 +3,8 @@ import Logo from '../../assets/withe-logo.png'
 import {useNavigate} from "react-router-dom";
 export function GetNavbar(){
     const email = localStorage.getItem("email")
+    const projectName = localStorage.getItem("current-project-name")
+    const projectType = localStorage.getItem("current-project-type")
     const navigate = useNavigate()
     const onLogoClick = () => {
         navigate("/projects")
@@ -17,6 +19,12 @@ export function GetNavbar(){
                 <ul className="navbar-nav">
                     <li className="nav-item">
                         <a className="nav-link">{email}</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link">Currently working on: <strong>{projectName}</strong></a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link">Tracing: <strong>{projectType === "us-umlclass" && "User Stories and Class Diagrams"}</strong></a>
                     </li>
                 </ul>
             </div>

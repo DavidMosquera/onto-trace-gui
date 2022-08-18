@@ -1,9 +1,7 @@
-import React, {useState} from 'react'
+import React from 'react'
 
-export function GetClassDiagramListItem({_class, onSeeArtifact}){
+export function GetClassDiagramListItem({_class, onSeeArtifact, canIChangeArtifact}){
     const {name,individualURI,attributes,operations, associations}= _class
-    const [classClicked, setClassClicked] = useState(false)
-
     return (
         <div className="accordion-item">
             <h2 className="accordion-header" id={"heading"+name}>
@@ -14,7 +12,7 @@ export function GetClassDiagramListItem({_class, onSeeArtifact}){
             </h2>
             <div id={name} className="accordion-collapse collapse" aria-labelledby={"heading"+name}>
                 <div className="accordion-body">
-                    <a href={"#"} className="card card-body" onClick={()=>{
+                    <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"} className="card card-body text-decoration-none" onClick={()=>{
                         const classArtifact = {
                             individualURI:individualURI
                         }
@@ -25,7 +23,7 @@ export function GetClassDiagramListItem({_class, onSeeArtifact}){
                     {
                         attributes.map((attribute)=>{
                             return (
-                                <a href={"#"} className="card card-body" onClick={()=>{
+                                <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"} className="card card-body text-decoration-none" onClick={()=>{
                                     const attributeArtifact = {
                                         individualURI:attribute
                                     }
@@ -39,7 +37,7 @@ export function GetClassDiagramListItem({_class, onSeeArtifact}){
                     {
                         operations.map((operation)=>{
                             return (
-                                <a href={"#"} className="card card-body" onClick={()=>{
+                                <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"} className="card card-body text-decoration-none" onClick={()=>{
                                     const operationArtifact = {
                                         individualURI:operation
                                     }
@@ -53,7 +51,7 @@ export function GetClassDiagramListItem({_class, onSeeArtifact}){
                     {
                         associations.map((association)=>{
                             return (
-                                <a href={"#"} className="card card-body" onClick={()=>{
+                                <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"} className="card card-body text-decoration-none" onClick={()=>{
                                     const associationArtifact = {
                                         individualURI:association
                                     }

@@ -5,7 +5,7 @@ export function GetTraceArtifactList({isLoading, artifacts, handleUnTrace, setTa
     const [isRequestSent, setIsRequestSent] = useState(false);
     if(isLoading){
         return(
-            <div className={"row pt-1 ms-0 border border-info"} style={{height: "20vh", maxWidth:"100%", overflow:"auto"}}>
+            <div className={"row pt-1 ms-0 border border-info"} style={{height: "25vh", maxWidth:"100%", overflow:"auto"}}>
                 <div className="col-md-12">
                     <div className="text-center align-middle" style={{paddingTop:"7vh"}}>
                         <div className="spinner-grow text-info" role="status">
@@ -16,8 +16,17 @@ export function GetTraceArtifactList({isLoading, artifacts, handleUnTrace, setTa
             </div>);
     }
     if(artifacts.length >0){
+        artifacts.sort(function (a,b){
+            if(a.individualName > b.individualName){
+                return 1
+            }
+            if(b.individualName > a.individualName){
+                return -1
+            }
+            return 0
+        })
         return (
-            <div className={"row pt-1 ms-0 border border-info"} style={{height: "20vh", maxWidth:"100%", overflow:"auto"}}>
+            <div className={"row pt-1 ms-0 border border-info"} style={{height: "25vh", maxWidth:"100%", overflow:"auto"}}>
                 <div className={"col-sm-12"}>
                     <table className="table">
                         <thead>
@@ -30,7 +39,7 @@ export function GetTraceArtifactList({isLoading, artifacts, handleUnTrace, setTa
                         <tbody>
                         {
                             artifacts.map((artifact, index) => (
-                                <GetTracedArtifactListItem isRequestSent={isRequestSent} setIsRequestSent={setIsRequestSent} artifact={artifact} index={index} handleUnTrace={handleUnTrace} setTab={setTab} onArtifactChecked={onArtifactChecked}/>
+                                <GetTracedArtifactListItem isLoading={isLoading} isRequestSent={isRequestSent} setIsRequestSent={setIsRequestSent} artifact={artifact} index={index} handleUnTrace={handleUnTrace} setTab={setTab} onArtifactChecked={onArtifactChecked}/>
                             ))
                         }
                         </tbody>
@@ -40,7 +49,7 @@ export function GetTraceArtifactList({isLoading, artifacts, handleUnTrace, setTa
         );
     }else{
         return (
-            <div className={"row pt-1 ms-0 border border-info"} style={{height: "20vh", maxWidth:"100%", overflow:"auto"}}>
+            <div className={"row pt-1 ms-0 border border-info"} style={{height: "25vh", maxWidth:"100%", overflow:"auto"}}>
                 <div className="col-md-12">
                     <div className="text-center" role="alert">
                         <strong>There is not yet a traced artifact!</strong>

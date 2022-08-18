@@ -4,55 +4,42 @@ import { GetNavbar } from '../components/common/NavBar';
 import { GetArtifactView } from '../components/v1-ontotrace/ArtifactTraceViewer';
 import { GetFooter } from '../components/common/Footer.jsx';
 
-export function OntoTraceMenu(){
-    const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
+export function OntoTraceMenu() {
+    const [errorOnPage, setError] = useState(null);
     const [sourceArtifacts, setSourceArtifacts] = useState([]);
-    const [artifactViewTabs, setArtifactViewTabs] = useState({id:'',name:'',selected:false,artifact:{}});
+    const [artifactViewTabs, setArtifactViewTabs] = useState({
+        id: '',
+        name: '',
+        selected: false,
+        artifact: {},
+        suggestedArtifacts: [],
+        tracedArtifacts: []
+    });
     const [targetArtifacts, setTargetArtifacts] = useState([]);
-    const [unTracedArtifacts, setUnTracedArtifacts] = useState([]);
+    const [loadedTabs, setLoadedTabs] = useState([]);
     const projectId = localStorage.getItem("current-project");
+    const [canIChangeArtifact, setCanIChangeArtifact] = useState(true);
+    const [contentServicesLoaded, setContentServicesLoaded] = useState(true);
+    const [traceListOverall, setTraceList] = useState([]);
 
 
+    const [isProjectLoaded, setIsProjectLoaded] = useState(false);
+    const [isTargetArtifactsLoaded, setIsTargetArtifactsLoaded] = useState(false);
+    const [isSourceArtifactsLoaded, setIsSourceArtifactsLoaded] = useState(false);
+    const [isTraceListLoaded, setIsTraceListLoaded] = useState(false);
+
+    //Check if project is loaded
     useEffect(() => {
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/un-traced-sources/id="+projectId)
-            .then(res => res.json())
-            .then(
-                (data) => {
-                    if(Object.keys(data).length !== 0){
-                        let dataSources = [...unTracedArtifacts];
-                        dataSources = dataSources.concat(data._embedded.sourceList);
-                        setUnTracedArtifacts(dataSources);
-                    }
-                    setIsLoaded(true);
-                },
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
-            )
-    }, [])
+        setIsProjectLoaded(isSourceArtifactsLoaded && isTargetArtifactsLoaded && isTraceListLoaded)
+    },[isTargetArtifactsLoaded, isSourceArtifactsLoaded, isTraceListLoaded])
 
-    useEffect(() => {
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/un-traced-targets/id="+projectId)
-            .then(res => res.json())
-            .then(
-                (data) => {
-                    if(Object.keys(data).length !== 0){
-                        let dataTargets = [...unTracedArtifacts];
-                        dataTargets = dataTargets.concat(data._embedded.targetList);
-                        setUnTracedArtifacts(dataTargets);
-                    }
-                    setIsLoaded(true);
-                },
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
-            )
-    }, [])
+    //Check if services are loaded to change artifact
+    useEffect(()=>{
+        setCanIChangeArtifact(contentServicesLoaded)
+    }, [contentServicesLoaded])
 
     useEffect( () => {
+        setIsTargetArtifactsLoaded(false)
         fetch("http://localhost:8080/onto-trace-api/ontology-web-services/target-artifacts/id="+projectId)
             .then(res => res.json())
             .then(
@@ -64,16 +51,17 @@ export function OntoTraceMenu(){
                         })
                         setTargetArtifacts(data2._embedded.targetList);
                     }
-                    setIsLoaded(true);
+                    setIsTargetArtifactsLoaded(true)
                 },
                 (error) => {
-                    setIsLoaded(true);
+                    setIsTargetArtifactsLoaded(true)
                     setError(error);
                 }
             )
-    }, [])
+    }, [projectId])
 
     useEffect(() => {
+        setIsSourceArtifactsLoaded(false)
         fetch("http://localhost:8080/onto-trace-api/ontology-web-services/source-artifacts/id="+projectId)
             .then(res => res.json())
             .then(
@@ -85,34 +73,62 @@ export function OntoTraceMenu(){
                         })
                         setSourceArtifacts(data2._embedded.sourceList);
                     }
-                    setIsLoaded(true);
+                    setIsSourceArtifactsLoaded(true)
                 },
                 (error) => {
-                    setIsLoaded(true);
+                    setIsSourceArtifactsLoaded(true)
                     setError(error);
                 }
             )
-    }, [])
+    }, [projectId])
+
+    //We get all the traces between artifacts
+    useEffect(()=>{
+        setIsTraceListLoaded(false)
+        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/id="+projectId)
+            .then(res => res.json())
+            .then(
+                (data) => {
+                    if(Object.keys(data).length !== 0){
+                        const {_embedded:{traceList}} = data
+                        setTraceList(traceList)
+                    }
+                    setIsTraceListLoaded(true)
+                },
+                (error) => {
+                    setIsTraceListLoaded(true)
+                    setError(error);
+                }
+            )
+    },[projectId])
 
     const onSeeArtifact = (artifactOnSelect) => {
-        let artifactInList = sourceArtifacts.find((source) => source.individualURI === artifactOnSelect.individualURI);
-        artifactInList = artifactInList === undefined ? targetArtifacts.find((target) => target.individualURI === artifactOnSelect.individualURI):artifactInList;
-        const newTab = { id: artifactInList.individualURI, name: artifactInList.individualName, selected:true, artifact: artifactInList};
-        setArtifactViewTabs((tab) => {return newTab});
+        if(canIChangeArtifact){
+            let artifactInList = sourceArtifacts.find((source) => source.individualURI === artifactOnSelect.individualURI);
+            artifactInList = artifactInList === undefined ? targetArtifacts.find((target) => target.individualURI === artifactOnSelect.individualURI):artifactInList;
+            if(!loadedTabs.find((tab) => tab.id === artifactInList.individualURI)){
+                const newTab = { id: artifactInList.individualURI, name: artifactInList.individualName, selected:true, artifact: artifactInList, suggestedArtifacts:[], tracedArtifacts:[]};
+                setArtifactViewTabs((tab) => {return newTab});
+                setLoadedTabs([...loadedTabs, newTab])
+            }else{
+                const newTab = {...loadedTabs.find((tab) => tab.id === artifactInList.individualURI)}
+                setArtifactViewTabs((tab) => {return newTab});
+            }
+        }
     }
 
     const updateSourceArtifacts = (artifacts) => {
         setSourceArtifacts(artifacts)
     }
 
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
+    if (errorOnPage) {
+        return <div>Error: {errorOnPage.message}</div>;
+    } else if (!isProjectLoaded) {
         return (<div className={"row pt-1 ms-0 border border-info"} style={{height: "100vh", maxWidth:"100%", overflow:"auto"}}>
             <div className="col-md-12">
                 <div className="text-center align-middle" style={{paddingTop:"45vh"}}>
-                    <div className="spinner-grow text-info" role="status">
-                        <span className="sr-only">Loading...</span>
+                    <div className="spinner-grow text-dark" role="status">
+                        <span className="sr-only"></span>
                     </div>
                 </div>
             </div>
@@ -132,11 +148,11 @@ export function OntoTraceMenu(){
                                 </div>
                             </div>
                             <div className={"overflow-auto m-0 p-0"} style={{height:"90%"}}>
-                                <GetArtifactList artifactType={"user-stories-sources"} artifacts={sourceArtifacts} onArtifactChecked={onSeeArtifact} setSourceArtifacts={updateSourceArtifacts}/>
+                                <GetArtifactList canIChangeArtifact={canIChangeArtifact} artifactType={"user-stories-sources"} artifacts={sourceArtifacts} onArtifactChecked={onSeeArtifact} setSourceArtifacts={updateSourceArtifacts}/>
                             </div>
                         </div>
                         <div className={"col-sm-8 mh-100 pt-2"}>
-                            <GetArtifactView tab={artifactViewTabs} onArtifactChecked={onSeeArtifact}/>
+                            <GetArtifactView sourceArtifacts={sourceArtifacts} targetArtifacts={targetArtifacts} traceList={traceListOverall} setTraceList={setTraceList} setContentServicesLoaded={setContentServicesLoaded} loadedTabs={loadedTabs} tab={artifactViewTabs} onArtifactChecked={onSeeArtifact}/>
                         </div>
                         <div className={"col-sm-2 mh-100"} style={{background:"#f8f7f7", overflow:"auto", borderBottom:"0.5px solid #a1a1a1"}}>
                             <div className={"row pt-2 pb-2"} style={{background:"#f8f7f7"}}>
@@ -147,7 +163,7 @@ export function OntoTraceMenu(){
                                 </div>
                             </div>
                             <div className={"overflow-auto m-0 p-0"} style={{height:"90%"}}>
-                                <GetArtifactList artifactType={"class-diagram-targets"} artifacts={targetArtifacts} onArtifactChecked={onSeeArtifact} setSourceArtifacts={updateSourceArtifacts}/>
+                                <GetArtifactList canIChangeArtifact={canIChangeArtifact} artifactType={"class-diagram-targets"} artifacts={targetArtifacts} onArtifactChecked={onSeeArtifact} setSourceArtifacts={updateSourceArtifacts}/>
                             </div>
                         </div>
                     </div>

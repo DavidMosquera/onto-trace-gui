@@ -10,6 +10,8 @@ export function ProjectCard({project}) {
     const navigate = useNavigate();
     const onProjectClick = () =>{
         localStorage.setItem("current-project", id)
+        localStorage.setItem("current-project-name", projectName)
+        localStorage.setItem("current-project-type", type)
         localStorage.removeItem("tab")
         navigate("/v1/onto-trace")
     }

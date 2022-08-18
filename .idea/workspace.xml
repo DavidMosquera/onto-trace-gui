@@ -2,32 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e738bdc-5b66-4032-a9b8-0430628e1170" name="Changes" comment="Commit">
-      <change afterPath="$PROJECT_DIR$/src/assets/custom.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/us-class.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/us-code.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/common/Empty.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewerTabContentTabular.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ClassDiagramList.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ClassDiagramListItem.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/JsJointArtifactViewer.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/UserStoryList.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/UserStoryListItem.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/v1-projects/ProjectCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/testpage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/GetArtifactViewOnTabNotSelected.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/TraceInformation.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/TraceInformationItem.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/common/NavBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/NavBar.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactList.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewer.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewerTab.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewerTab.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewerTab.jsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewerTabContent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewerTabContent.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewerTabContentTabular.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewerTabContentTabular.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/ClassDiagramList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ClassDiagramList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/ClassDiagramListItem.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ClassDiagramListItem.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/SuggestedArtifactList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/SuggestedArtifactList.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/SuggestedArtifactListItem.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/SuggestedArtifactListItem.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/TracedArtifactList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/TracedArtifactList.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/TracedArtifactListItem.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/TracedArtifactListItem.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/UserStoryList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/UserStoryList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/UserStoryListItem.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/UserStoryListItem.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/v1-projects/ProjectCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-projects/ProjectCard.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/ontotrace.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ontotrace.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/projects.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/projects.jsx" afterDir="false" />
     </list>
@@ -116,7 +109,7 @@
       <workItem from="1650961241435" duration="1612000" />
       <workItem from="1658828955448" duration="599000" />
       <workItem from="1659952841904" duration="40455000" />
-      <workItem from="1660546864446" duration="40268000" />
+      <workItem from="1660546864446" duration="70281000" />
     </task>
     <task id="LOCAL-00001" summary="Commit">
       <created>1660145933174</created>

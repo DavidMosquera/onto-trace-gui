@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {GetTabContent} from "./ArtifactTraceViewerTabContent";
 import {GetUserStoryListItem} from "./UserStoryListItem";
 
-export function GetUserStoryList({onSeeArtifact}){
+export function GetUserStoryList({onSeeArtifact, canIChangeArtifact}){
     const projectId = localStorage.getItem("current-project");
     const [userStories, setUserStories] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -86,7 +86,7 @@ export function GetUserStoryList({onSeeArtifact}){
       <div className="accordion accordion-flush">
           {
               userStories.map((userStory) => (
-                  <GetUserStoryListItem userStory={userStory} onSeeArtifact={onSeeArtifact}/>
+                  <GetUserStoryListItem canIChangeArtifact={canIChangeArtifact} userStory={userStory} onSeeArtifact={onSeeArtifact}/>
               ))
           }
       </div>

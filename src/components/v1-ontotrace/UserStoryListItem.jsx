@@ -1,11 +1,7 @@
 import React, {useState} from 'react'
 
-export function GetUserStoryListItem({userStory, onSeeArtifact}){
+export function GetUserStoryListItem({userStory, onSeeArtifact, canIChangeArtifact}){
     const {name,goal,action,role, objects} = userStory
-    const [userStoryClicked, setUserStoryClicked] = useState(false)
-    const handleUserStoryClick = ()=>{
-        setUserStoryClicked(!userStoryClicked)
-    }
     const handleGoalStoryClick = () => {
         const artifact = {
             individualURI:goal
@@ -34,15 +30,16 @@ export function GetUserStoryListItem({userStory, onSeeArtifact}){
             </h2>
             <div id={name} className="accordion-collapse collapse" aria-labelledby={"heading"+name}>
                 <div className="accordion-body">
-                    <a href={"#"} className="card card-body text-decoration-none" onClick={handleRoleStoryClick}>
+                    <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"} className="card card-body text-decoration-none" onClick={handleRoleStoryClick}>
                         {role.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
                     </a>
-                    <a href={"#"}  className="card card-body text-decoration-none" onClick={handleActionStoryClick}>
+                    <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"}  className="card card-body text-decoration-none" onClick={handleActionStoryClick}>
                         {action.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
                     </a>
                     {
                         objects.map((object) =>{
-                            return(<a href={"#"}  className="card card-body text-decoration-none" onClick={()=>{
+                            return(
+                                <a href={"#"} style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} className="card card-body text-decoration-none" onClick={()=>{
                                     const objectArtifact = {individualURI:object}
                                     onSeeArtifact(objectArtifact)
                                 }
@@ -51,7 +48,7 @@ export function GetUserStoryListItem({userStory, onSeeArtifact}){
                             </a>)
                         })
                     }
-                    <a href={"#"}  className="card card-body text-decoration-none" onClick={handleGoalStoryClick}>
+                    <a href={"#"} style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} className="card card-body text-decoration-none" onClick={handleGoalStoryClick}>
                         {goal.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
                     </a>
                 </div>

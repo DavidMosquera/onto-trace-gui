@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {GetClassDiagramListItem} from "./ClassDiagramListItem";
-export function GetClassDiagramList({onSeeArtifact}){
+export function GetClassDiagramList({onSeeArtifact, canIChangeArtifact}){
     const projectId = localStorage.getItem("current-project");
     const [classes, setClasses] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -80,7 +80,7 @@ export function GetClassDiagramList({onSeeArtifact}){
         <div className="accordion accordion-flush">
             {
                 classes.map((_class) => (
-                    <GetClassDiagramListItem _class={_class} onSeeArtifact={onSeeArtifact}/>
+                    <GetClassDiagramListItem canIChangeArtifact={canIChangeArtifact} _class={_class} onSeeArtifact={onSeeArtifact}/>
                 ))
             }
         </div>
