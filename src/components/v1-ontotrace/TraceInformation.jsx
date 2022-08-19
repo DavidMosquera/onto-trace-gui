@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {GetTraceInformationItem} from "./TraceInformationItem";
-export function GetTraceOverviewInformation({traceList, sourceArtifacts, isTraceabilityOverviewPanelFullScreen, setIsTraceabilityOverviewPanelFullScreen}){
+export function GetTraceOverviewInformation({onArtifactChecked, canIChangeArtifact, filterWords, setFilterWords, traceList, sourceArtifacts, isTraceabilityOverviewPanelFullScreen, setIsTraceabilityOverviewPanelFullScreen}){
     const [tracedArtifact, setTracedArtifact] = useState([])
-    const [filterWords, setFilterWords] = useState("")
     useEffect(()=>{
         let newTracedArtifacts = []
         sourceArtifacts.forEach((sourceArtifact) =>{
@@ -52,7 +51,8 @@ export function GetTraceOverviewInformation({traceList, sourceArtifacts, isTrace
                             <span className="input-group-text bg-light" id="basic-addon1"><i className="bi bi-search"></i></span>
                         </div>
                         <input type="text" className="form-control" placeholder="Filter!" aria-label="filter"
-                               aria-describedby="basic-addon1" value={filterWords} onChange={event => setFilterWords(event.target.value)}/>
+                               aria-describedby="basic-addon1" value={filterWords} onChange={event => {
+                                   setFilterWords(event.target.value)                        }}/>
                     </div>
                 </div>
                 <div className={"col-sm-1"}>
@@ -80,7 +80,7 @@ export function GetTraceOverviewInformation({traceList, sourceArtifacts, isTrace
                 }
                 {
                     tracedArtifact.map((tracedArtifactOnList) =>
-                        <GetTraceInformationItem traceInfoObject={tracedArtifactOnList} filterWords={filterWords}/>
+                        <GetTraceInformationItem setIsTraceabilityOverviewPanelFullScreen={setIsTraceabilityOverviewPanelFullScreen} canIChangeArtifact={canIChangeArtifact} onArtifactChecked={onArtifactChecked} traceInfoObject={tracedArtifactOnList} filterWords={filterWords}/>
                     )
                 }
             </div>

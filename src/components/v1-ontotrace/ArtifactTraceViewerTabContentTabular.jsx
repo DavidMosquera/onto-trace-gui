@@ -3,7 +3,7 @@ import {GetSuggestedArtifactList} from "./SuggestedArtifactList";
 import {GetTraceArtifactList} from "./TracedArtifactList";
 import {GetTraceOverviewInformation} from "./TraceInformation";
 
-export function GetArtifactViewerTabContentTabular({setTraceList, traceList, isLoading, tab, tabId, tracedArtifacts, showURI, handleRemoveURIs, handleOnTrace, suggestedArtifacts, setTab, onArtifactChecked, handleUnTrace, sourceArtifacts, targetArtifacts}){
+export function GetArtifactViewerTabContentTabular({canIChangeArtifact, filterWords, setFilterWords,setTraceList, traceList, isLoading, tab, tabId, tracedArtifacts, showURI, handleRemoveURIs, handleOnTrace, suggestedArtifacts, setTab, onArtifactChecked, handleUnTrace, sourceArtifacts, targetArtifacts}){
     const [isTraceabilityOverviewPanelFullScreen, setIsTraceabilityOverviewPanelFullScreen] = useState(false)
 
     if(isTraceabilityOverviewPanelFullScreen){
@@ -11,7 +11,7 @@ export function GetArtifactViewerTabContentTabular({setTraceList, traceList, isL
             <Fragment>
                 <div className={"row pt-3 mx-1"}>
                     <div className={"col-sm-12 shadow-lg bg-white rounded"} style={{height:"75vh"}}>
-                        <GetTraceOverviewInformation setIsTraceabilityOverviewPanelFullScreen={setIsTraceabilityOverviewPanelFullScreen} isTraceabilityOverviewPanelFullScreen={isTraceabilityOverviewPanelFullScreen} setTraceList={setTraceList} traceList={traceList} sourceArtifacts={sourceArtifacts} targetArtifacts={targetArtifacts}/>
+                        <GetTraceOverviewInformation onArtifactChecked={onArtifactChecked} canIChangeArtifact={canIChangeArtifact} filterWords={filterWords} setFilterWords={setFilterWords} setIsTraceabilityOverviewPanelFullScreen={setIsTraceabilityOverviewPanelFullScreen} isTraceabilityOverviewPanelFullScreen={isTraceabilityOverviewPanelFullScreen} setTraceList={setTraceList} traceList={traceList} sourceArtifacts={sourceArtifacts} targetArtifacts={targetArtifacts}/>
                     </div>
                 </div>
             </Fragment>
@@ -45,7 +45,7 @@ export function GetArtifactViewerTabContentTabular({setTraceList, traceList, isL
         </div>
         <div className={"row pt-3 mx-1"}>
             <div className={"col-sm-12 shadow-lg bg-white rounded"} style={{height:"39vh"}}>
-                <GetTraceOverviewInformation setIsTraceabilityOverviewPanelFullScreen={setIsTraceabilityOverviewPanelFullScreen} isTraceabilityOverviewPanelFullScreen={isTraceabilityOverviewPanelFullScreen} setTraceList={setTraceList} traceList={traceList} sourceArtifacts={sourceArtifacts} targetArtifacts={targetArtifacts}/>
+                <GetTraceOverviewInformation  onArtifactChecked={onArtifactChecked} canIChangeArtifact={canIChangeArtifact} filterWords={filterWords} setFilterWords={setFilterWords} setIsTraceabilityOverviewPanelFullScreen={setIsTraceabilityOverviewPanelFullScreen} isTraceabilityOverviewPanelFullScreen={isTraceabilityOverviewPanelFullScreen} setTraceList={setTraceList} traceList={traceList} sourceArtifacts={sourceArtifacts} targetArtifacts={targetArtifacts}/>
             </div>
         </div>
     </Fragment>

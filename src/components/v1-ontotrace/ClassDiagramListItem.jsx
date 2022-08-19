@@ -1,4 +1,5 @@
 import React from 'react'
+import {GetTextArtifact} from "./TextArtifact";
 
 export function GetClassDiagramListItem({_class, onSeeArtifact, canIChangeArtifact}){
     const {name,individualURI,attributes,operations, associations}= _class
@@ -12,53 +13,33 @@ export function GetClassDiagramListItem({_class, onSeeArtifact, canIChangeArtifa
             </h2>
             <div id={name} className="accordion-collapse collapse" aria-labelledby={"heading"+name}>
                 <div className="accordion-body">
-                    <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"} className="card card-body text-decoration-none" onClick={()=>{
-                        const classArtifact = {
-                            individualURI:individualURI
-                        }
-                        onSeeArtifact(classArtifact)
-                    }}>
-                        {individualURI.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
-                    </a>
+                    <div className="card card-body">
+                        <GetTextArtifact canIChangeArtifact={canIChangeArtifact} artifactUri={individualURI} seeArtifact={onSeeArtifact}/>
+                    </div>
                     {
                         attributes.map((attribute)=>{
                             return (
-                                <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"} className="card card-body text-decoration-none" onClick={()=>{
-                                    const attributeArtifact = {
-                                        individualURI:attribute
-                                    }
-                                    onSeeArtifact(attributeArtifact)
-                                }}>
-                                    {attribute.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
-                                </a>
+                                <div className="card card-body">
+                                    <GetTextArtifact canIChangeArtifact={canIChangeArtifact} artifactUri={attribute} seeArtifact={onSeeArtifact}/>
+                                </div>
                             );
                         })
                     }
                     {
                         operations.map((operation)=>{
                             return (
-                                <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"} className="card card-body text-decoration-none" onClick={()=>{
-                                    const operationArtifact = {
-                                        individualURI:operation
-                                    }
-                                    onSeeArtifact(operationArtifact)
-                                }}>
-                                    {operation.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
-                                </a>
+                                <div className="card card-body">
+                                    <GetTextArtifact canIChangeArtifact={canIChangeArtifact} artifactUri={operation} seeArtifact={onSeeArtifact}/>
+                                </div>
                             );
                         })
                     }
                     {
                         associations.map((association)=>{
                             return (
-                                <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"} className="card card-body text-decoration-none" onClick={()=>{
-                                    const associationArtifact = {
-                                        individualURI:association
-                                    }
-                                    onSeeArtifact(associationArtifact)
-                                }}>
-                                    {association.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
-                                </a>
+                                <div className="card card-body">
+                                    <GetTextArtifact canIChangeArtifact={canIChangeArtifact} artifactUri={association} seeArtifact={onSeeArtifact}/>
+                                </div>
                             );
                         })
                     }

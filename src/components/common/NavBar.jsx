@@ -1,7 +1,7 @@
 import React from 'react';
 import Logo from '../../assets/withe-logo.png'
 import {useNavigate} from "react-router-dom";
-export function GetNavbar(){
+export function GetNavbar({projectMenu}){
     const email = localStorage.getItem("email")
     const projectName = localStorage.getItem("current-project-name")
     const projectType = localStorage.getItem("current-project-type")
@@ -20,12 +20,12 @@ export function GetNavbar(){
                     <li className="nav-item">
                         <a className="nav-link">{email}</a>
                     </li>
-                    <li className="nav-item">
+                    {!projectMenu && <li className="nav-item">
                         <a className="nav-link">Currently working on: <strong>{projectName}</strong></a>
-                    </li>
-                    <li className="nav-item">
+                    </li>}
+                    {!projectMenu && <li className="nav-item">
                         <a className="nav-link">Tracing: <strong>{projectType === "us-umlclass" && "User Stories and Class Diagrams"}</strong></a>
-                    </li>
+                    </li>}
                 </ul>
             </div>
         </nav>

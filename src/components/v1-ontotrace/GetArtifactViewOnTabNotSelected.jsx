@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react'
 import {GetTraceOverviewInformation} from "./TraceInformation";
 
-export function GetArtifactViewOnTabNotSelected({traceList, sourceArtifacts}){
+export function GetArtifactViewOnTabNotSelected({onArtifactChecked,canIChangeArtifact, filterWords, setFilterWords, traceList, sourceArtifacts}){
     return(
         <Fragment>
             <div className={"tab-pane fade active show p-3" }>
@@ -13,7 +13,7 @@ export function GetArtifactViewOnTabNotSelected({traceList, sourceArtifacts}){
                 </div>
                 <div className={"row mx-1"}>
                     <div className={"col-sm-12 shadow-lg bg-white rounded"} style={{height:"70vh"}}>
-                        <GetTraceOverviewInformation  isTraceabilityOverviewPanelFullScreen={true} setIsTraceabilityOverviewPanelFullScreen={()=>{}} traceList={traceList} sourceArtifacts={sourceArtifacts}/>
+                        <GetTraceOverviewInformation canIChangeArtifact={canIChangeArtifact} onArtifactChecked={onArtifactChecked} filterWords={filterWords} setFilterWords={setFilterWords} isTraceabilityOverviewPanelFullScreen={true} setIsTraceabilityOverviewPanelFullScreen={()=>{}} traceList={traceList} sourceArtifacts={sourceArtifacts}/>
                     </div>
                 </div>
             </div>

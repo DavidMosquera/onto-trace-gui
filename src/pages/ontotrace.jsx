@@ -18,6 +18,7 @@ export function OntoTraceMenu() {
     const [targetArtifacts, setTargetArtifacts] = useState([]);
     const [loadedTabs, setLoadedTabs] = useState([]);
     const projectId = localStorage.getItem("current-project");
+    const projectName = localStorage.getItem("current-project-name")
     const [canIChangeArtifact, setCanIChangeArtifact] = useState(true);
     const [contentServicesLoaded, setContentServicesLoaded] = useState(true);
     const [traceListOverall, setTraceList] = useState([]);
@@ -27,6 +28,11 @@ export function OntoTraceMenu() {
     const [isTargetArtifactsLoaded, setIsTargetArtifactsLoaded] = useState(false);
     const [isSourceArtifactsLoaded, setIsSourceArtifactsLoaded] = useState(false);
     const [isTraceListLoaded, setIsTraceListLoaded] = useState(false);
+
+    //changing page title
+    useEffect(()=>{
+        document.title = 'OntoTrace - '+projectName;
+    },[])
 
     //Check if project is loaded
     useEffect(() => {
@@ -152,7 +158,7 @@ export function OntoTraceMenu() {
                             </div>
                         </div>
                         <div className={"col-sm-8 mh-100 pt-2"}>
-                            <GetArtifactView sourceArtifacts={sourceArtifacts} targetArtifacts={targetArtifacts} traceList={traceListOverall} setTraceList={setTraceList} setContentServicesLoaded={setContentServicesLoaded} loadedTabs={loadedTabs} tab={artifactViewTabs} onArtifactChecked={onSeeArtifact}/>
+                            <GetArtifactView canIChangeArtifact={canIChangeArtifact} sourceArtifacts={sourceArtifacts} targetArtifacts={targetArtifacts} traceList={traceListOverall} setTraceList={setTraceList} setContentServicesLoaded={setContentServicesLoaded} loadedTabs={loadedTabs} tab={artifactViewTabs} onArtifactChecked={onSeeArtifact}/>
                         </div>
                         <div className={"col-sm-2 mh-100"} style={{background:"#f8f7f7", overflow:"auto", borderBottom:"0.5px solid #a1a1a1"}}>
                             <div className={"row pt-2 pb-2"} style={{background:"#f8f7f7"}}>

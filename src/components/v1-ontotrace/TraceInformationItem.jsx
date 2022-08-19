@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
+import {GetTextArtifact} from "./TextArtifact";
 
-export function GetTraceInformationItem({traceInfoObject, filterWords}){
+export function GetTraceInformationItem({setIsTraceabilityOverviewPanelFullScreen, canIChangeArtifact, onArtifactChecked, traceInfoObject, filterWords}){
     const [display, setDisplay] = useState(false)
     useEffect(()=>{
         if(filterWords===undefined||filterWords.length===0||filterWords===""||filterWords===null){
@@ -26,12 +27,14 @@ export function GetTraceInformationItem({traceInfoObject, filterWords}){
     },[filterWords])
     return (
     <div className={"row border-bottom border-dark"}  style={{display:display?"":"none"}}>
-        <div className={"col-sm-5"}>
-            {traceInfoObject.individualURI.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
+        <div onClick={()=>{setIsTraceabilityOverviewPanelFullScreen(false)}} className={"col-sm-5"}>
+            <GetTextArtifact canIChangeArtifact={canIChangeArtifact} seeArtifact={onArtifactChecked} artifactUri={traceInfoObject.individualURI}/>
         </div>
         <ul className={"col-sm-7"} style={{height:"100%"}}>
             {traceInfoObject.tracedArtifactList.map((tracedArtifactOnList)=>
-                <li>{tracedArtifactOnList.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}</li>
+                <li onClick={()=>{setIsTraceabilityOverviewPanelFullScreen(false)}}>
+                    <GetTextArtifact canIChangeArtifact={canIChangeArtifact} seeArtifact={onArtifactChecked} artifactUri={tracedArtifactOnList}/>
+                </li>
             )}
             {traceInfoObject.tracedArtifactList.length===0 &&
                 <em>Empty!</em>

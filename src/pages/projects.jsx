@@ -8,6 +8,10 @@ import {NoProjects} from "../components/common/Empty";
 export function Projects(){
     const [userProjects, setProjects] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    //changing page title
+    useEffect(()=>{
+        document.title = 'OntoTrace - Projects!';
+    },[])
     //TODO check if the token exists
     let uuid = localStorage.getItem("token")
     localStorage.removeItem("current-project")
@@ -46,7 +50,7 @@ export function Projects(){
     }
     return(
             <Fragment>
-                <GetNavbar/>
+                <GetNavbar projectMenu={true}/>
                 <div className={"col-md-12 overflow-auto"} style={{maxHeight: "85vh", flex:"1"}}>
                     { userProjects.length > 0 &&
                         userProjects.map((userProject, index) => (

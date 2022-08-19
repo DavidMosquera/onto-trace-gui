@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import {GetTextArtifact} from "./TextArtifact";
 
 export function GetUserStoryListItem({userStory, onSeeArtifact, canIChangeArtifact}){
     const {name,goal,action,role, objects} = userStory
@@ -30,27 +31,21 @@ export function GetUserStoryListItem({userStory, onSeeArtifact, canIChangeArtifa
             </h2>
             <div id={name} className="accordion-collapse collapse" aria-labelledby={"heading"+name}>
                 <div className="accordion-body">
-                    <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"} className="card card-body text-decoration-none" onClick={handleRoleStoryClick}>
-                        {role.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
-                    </a>
-                    <a style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} href={"#"}  className="card card-body text-decoration-none" onClick={handleActionStoryClick}>
-                        {action.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
-                    </a>
+                    <div className="card card-body">
+                        <GetTextArtifact canIChangeArtifact={canIChangeArtifact} artifactUri={role} seeArtifact={onSeeArtifact}/>
+                    </div>
+                    <div className="card card-body">
+                        <GetTextArtifact canIChangeArtifact={canIChangeArtifact} artifactUri={action} seeArtifact={onSeeArtifact}/>
+                    </div>
                     {
-                        objects.map((object) =>{
-                            return(
-                                <a href={"#"} style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} className="card card-body text-decoration-none" onClick={()=>{
-                                    const objectArtifact = {individualURI:object}
-                                    onSeeArtifact(objectArtifact)
-                                }
-                            }>
-                                {object.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
-                            </a>)
-                        })
+                        objects.map((object) => {
+                            return <div className="card card-body ">
+                                <GetTextArtifact canIChangeArtifact={canIChangeArtifact} artifactUri={object} seeArtifact={onSeeArtifact}/>
+                            </div>})
                     }
-                    <a href={"#"} style={{cursor:canIChangeArtifact?"default":"progress", opacity:canIChangeArtifact?"1.0":"0.6"}} className="card card-body text-decoration-none" onClick={handleGoalStoryClick}>
-                        {goal.replace(/http([\s\S]*?)#|<|>/g, "").replace(/_/g, " ")}
-                    </a>
+                    <div className="card card-body ">
+                        <GetTextArtifact canIChangeArtifact={canIChangeArtifact} artifactUri={goal} seeArtifact={onSeeArtifact}/>
+                    </div>
                 </div>
             </div>
         </div>

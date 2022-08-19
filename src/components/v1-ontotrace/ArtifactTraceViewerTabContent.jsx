@@ -2,7 +2,7 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {GetArtifactViewerTabContentTabular} from "./ArtifactTraceViewerTabContentTabular";
 import {GetArtifactViewOnGraph} from "./JsJointArtifactViewer";
 
-export function GetTabContent({tab, onArtifactChecked, loadedTabs, setContentServicesLoaded, traceList, setTraceList, sourceArtifacts, targetArtifacts}){
+export function GetTabContent({canIChangeArtifact, filterWords, setFilterWords, tab, onArtifactChecked, loadedTabs, setContentServicesLoaded, traceList, setTraceList, sourceArtifacts, targetArtifacts}){
     const {id, name} = tab;
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -204,14 +204,6 @@ export function GetTabContent({tab, onArtifactChecked, loadedTabs, setContentSer
             )
     }
 
-    const handleOnChangeViewTabularGraphClick = ()=>{
-        if(viewType==="tabular"){
-            setViewType("graph");
-        }else{
-            setViewType("tabular")
-        }
-    }
-
     if(tab.selected===true){
         if (error) {
             return <div>Error: {error.message}</div>;
@@ -227,7 +219,7 @@ export function GetTabContent({tab, onArtifactChecked, loadedTabs, setContentSer
                         </div>
                     </div>
                     {viewType === "tabular" &&
-                        <GetArtifactViewerTabContentTabular traceList={traceList} setTraceList={setTraceList} targetArtifacts={targetArtifacts} sourceArtifacts={sourceArtifacts} isLoading={isLoadingTraced||isLoadingSuggestions} tab={tab} tabId={id} tracedArtifacts={tracedArtifacts} showURI={showURI} handleRemoveURIs={handleRemoveURIs} handleOnTrace={handleOnTrace} suggestedArtifacts={suggestedArtifacts} onArtifactChecked={onArtifactChecked} handleUnTrace={handleUnTrace}/>
+                        <GetArtifactViewerTabContentTabular canIChangeArtifact={canIChangeArtifact} filterWords={filterWords} setFilterWords={setFilterWords} traceList={traceList} setTraceList={setTraceList} targetArtifacts={targetArtifacts} sourceArtifacts={sourceArtifacts} isLoading={isLoadingTraced||isLoadingSuggestions} tab={tab} tabId={id} tracedArtifacts={tracedArtifacts} showURI={showURI} handleRemoveURIs={handleRemoveURIs} handleOnTrace={handleOnTrace} suggestedArtifacts={suggestedArtifacts} onArtifactChecked={onArtifactChecked} handleUnTrace={handleUnTrace}/>
                     }
                     {viewType === "graph" &&
                         <GetArtifactViewOnGraph tab={tab}/>
