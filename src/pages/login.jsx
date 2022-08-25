@@ -2,6 +2,7 @@ import React, {Fragment, useState, useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import Logo from "../assets/logo.png"
 import {GetFooter} from "../components/common/Footer";
+import {GetAPI} from "../components/common/Configuration";
 
 export function Login(){
     const [email, setEmail] = useState("")
@@ -14,12 +15,13 @@ export function Login(){
             email : email,
             password : password
         }
-        fetch("http://localhost:8080/onto-trace-api/users/auth", {
+        fetch(GetAPI()+"onto-trace-api/users/auth", {
             method: 'POST',
             body:JSON.stringify(user),
             headers:{
                 'Content-Type':'application/json'
-            }
+            },
+            mode: "cors"
         }).then(res => {
             if(res.ok){
                 res.json().then((response) => {

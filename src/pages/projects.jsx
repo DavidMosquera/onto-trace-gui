@@ -4,6 +4,7 @@ import {GetFooter} from "../components/common/Footer";
 import {GetSuggestedArtifactListItem} from "../components/v1-ontotrace/SuggestedArtifactListItem";
 import {ProjectCard} from "../components/v1-projects/ProjectCard";
 import {NoProjects} from "../components/common/Empty";
+import {GetAPI} from "../components/common/Configuration";
 
 export function Projects(){
     const [userProjects, setProjects] = useState([]);
@@ -19,7 +20,7 @@ export function Projects(){
     localStorage.removeItem("current-project-type")
     const fetchProjectsFromAPI = () => {
         setIsLoading(true)
-        fetch("http://localhost:8080/onto-trace-api/users/id="+uuid+"/projects").then((res) => {
+        fetch(GetAPI()+"onto-trace-api/users/id="+uuid+"/projects", {mode: "cors"}).then((res) => {
             if(res.ok){
                 res.json().then((data) => {
                     if(!(Object.keys(data).length === 0)){

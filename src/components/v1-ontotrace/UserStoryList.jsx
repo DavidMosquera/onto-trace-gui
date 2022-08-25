@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {GetTabContent} from "./ArtifactTraceViewerTabContent";
 import {GetUserStoryListItem} from "./UserStoryListItem";
+import {GetAPI} from "../common/Configuration";
 
 export function GetUserStoryList({onSeeArtifact, canIChangeArtifact}){
     const projectId = localStorage.getItem("current-project");
@@ -8,7 +9,7 @@ export function GetUserStoryList({onSeeArtifact, canIChangeArtifact}){
     const [isLoading, setIsLoading] = useState(false)
     useEffect(()=>{
         setIsLoading(true)
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/user-stories/id="+projectId)
+        fetch(GetAPI()+"onto-trace-api/ontology-web-services/user-stories/id="+projectId, {mode: "cors"})
             .then(res => res.json())
             .then(
                 (data) => {

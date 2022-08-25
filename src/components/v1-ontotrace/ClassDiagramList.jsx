@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import {GetClassDiagramListItem} from "./ClassDiagramListItem";
+import {GetAPI} from "../common/Configuration";
 export function GetClassDiagramList({onSeeArtifact, canIChangeArtifact}){
     const projectId = localStorage.getItem("current-project");
     const [classes, setClasses] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     useEffect(()=>{
         setIsLoading(true)
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/class-diagrams/id="+projectId)
+        fetch(GetAPI()+"onto-trace-api/ontology-web-services/class-diagrams/id="+projectId, {mode: "cors"})
             .then(res => res.json())
             .then(
                 (data) => {

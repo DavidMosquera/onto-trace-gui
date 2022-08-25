@@ -1,6 +1,7 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {GetArtifactViewerTabContentTabular} from "./ArtifactTraceViewerTabContentTabular";
 import {GetArtifactViewOnGraph} from "./JsJointArtifactViewer";
+import {GetAPI} from "../common/Configuration";
 
 export function GetTabContent({canIChangeArtifact, filterWords, setFilterWords, tab, onArtifactChecked, loadedTabs, setContentServicesLoaded, traceList, setTraceList, sourceArtifacts, targetArtifacts}){
     const {id, name} = tab;
@@ -23,7 +24,7 @@ export function GetTabContent({canIChangeArtifact, filterWords, setFilterWords, 
 
     const getSuggestedArtifacts = () => {
         setIsLoadingSuggestions(true);
-        fetch(suggestedArtifactsQuery)
+        fetch(suggestedArtifactsQuery, {mode: "cors"})
             .then(res => res.json())
             .then(
                 (data) => {
@@ -49,7 +50,7 @@ export function GetTabContent({canIChangeArtifact, filterWords, setFilterWords, 
 
     const getTracedArtifacts = () => {
         setIsLoadingTraced(true)
-        fetch(tracedArtifactsQuery)
+        fetch(tracedArtifactsQuery, {mode: "cors"})
             .then(res => res.json())
             .then(
                 (data) => {
@@ -116,13 +117,14 @@ export function GetTabContent({canIChangeArtifact, filterWords, setFilterWords, 
                 }
             }
         }
-        await fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/id="+projectId,
+        await fetch(GetAPI()+"onto-trace-api/ontology-web-services/traces/id="+projectId,
             {
                 method:"POST",
                 body: JSON.stringify(traceObject),
                 headers: {
                     'Content-Type' : 'application/json'
-                }
+                },
+                mode:"cors"
             })
             .then(res => res.json())
             .then((d1) => {
@@ -172,13 +174,14 @@ export function GetTabContent({canIChangeArtifact, filterWords, setFilterWords, 
                 }
             }
         }
-        await fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/id="+projectId,
+        await fetch(GetAPI()+"onto-trace-api/ontology-web-services/traces/id="+projectId,
             {
                 method:"DELETE",
                 body: JSON.stringify(traceObject),
                 headers: {
                     'Content-Type' : 'application/json'
-                }
+                },
+                mode:"cors"
             })
             .then(res => res)
             .then((data) => {

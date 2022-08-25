@@ -3,6 +3,7 @@ import { GetArtifactList } from '../components/v1-ontotrace/ArtifactList';
 import { GetNavbar } from '../components/common/NavBar';
 import { GetArtifactView } from '../components/v1-ontotrace/ArtifactTraceViewer';
 import { GetFooter } from '../components/common/Footer.jsx';
+import {GetAPI} from "../components/common/Configuration";
 
 export function OntoTraceMenu() {
     const [errorOnPage, setError] = useState(null);
@@ -46,7 +47,7 @@ export function OntoTraceMenu() {
 
     useEffect( () => {
         setIsTargetArtifactsLoaded(false)
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/target-artifacts/id="+projectId)
+        fetch(GetAPI()+"onto-trace-api/ontology-web-services/target-artifacts/id="+projectId, {mode: "cors"})
             .then(res => res.json())
             .then(
                 (data2) => {
@@ -68,7 +69,7 @@ export function OntoTraceMenu() {
 
     useEffect(() => {
         setIsSourceArtifactsLoaded(false)
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/source-artifacts/id="+projectId)
+        fetch(GetAPI()+"onto-trace-api/ontology-web-services/source-artifacts/id="+projectId, {mode: "cors"})
             .then(res => res.json())
             .then(
                 (data2) => {
@@ -91,7 +92,7 @@ export function OntoTraceMenu() {
     //We get all the traces between artifacts
     useEffect(()=>{
         setIsTraceListLoaded(false)
-        fetch("http://localhost:8080/onto-trace-api/ontology-web-services/traces/id="+projectId)
+        fetch(GetAPI()+"onto-trace-api/ontology-web-services/traces/id="+projectId, {mode: "cors"})
             .then(res => res.json())
             .then(
                 (data) => {
