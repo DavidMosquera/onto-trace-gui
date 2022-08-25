@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e738bdc-5b66-4032-a9b8-0430628e1170" name="Changes" comment="Commit">
-      <change afterPath="$PROJECT_DIR$/src/components/common/Configuration.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewerTabContent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ArtifactTraceViewerTabContent.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/ClassDiagramList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/ClassDiagramList.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/UserStoryList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/UserStoryList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/v1-ontotrace/TraceInformation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/v1-ontotrace/TraceInformation.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/login.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ontotrace.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ontotrace.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/projects.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/projects.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +93,7 @@
       <workItem from="1658828955448" duration="599000" />
       <workItem from="1659952841904" duration="40455000" />
       <workItem from="1660546864446" duration="83528000" />
-      <workItem from="1661412773884" duration="3831000" />
+      <workItem from="1661412773884" duration="6580000" />
     </task>
     <task id="LOCAL-00001" summary="Commit">
       <created>1660145933174</created>

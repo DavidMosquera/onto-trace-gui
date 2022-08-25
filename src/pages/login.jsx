@@ -8,8 +8,10 @@ export function Login(){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate();
     const handleLoginClick = () =>{
+        setIsLoading(true)
         setError("")
         let user = {
             email : email,
@@ -30,8 +32,10 @@ export function Login(){
                         navigate("/projects")
                     }
                 )
+                setIsLoading(false)
             }else{
                 setError("Auth failed :( check your email and password")
+                setIsLoading(false)
             }
         })
     }
@@ -50,6 +54,12 @@ export function Login(){
                                         Error on authentication :'( check your email and password
                                     </div>
                                 )}
+                                {isLoading &&
+                                    <div className="text-center align-middle">
+                                        <div className="spinner-grow text-info" role="status">
+                                        </div>
+                                    </div>
+                                    }
                             </div>
                             <div className={"row"}>
                                 <div className={"offset-md-2 col-md-8 mt-2"}>
@@ -74,7 +84,7 @@ export function Login(){
                                     <div className={"row"}>
                                         <div className={" offset-md-4 col-md-4"}>
                                             <div className="d-grid">
-                                                <button type="button" className="btn btn-primary" onClick={handleLoginClick}>
+                                                <button disabled={isLoading} type="button" className="btn btn-primary" onClick={handleLoginClick}>
                                                     Login
                                                 </button>
                                             </div>

@@ -42,10 +42,10 @@ export function GetTraceOverviewInformation({onArtifactChecked, canIChangeArtifa
     <div className={"row"}>
         <div className={"col-sm-12"}>
             <div className={"row mx-1 pt-3 mb-2"}>
-                <div className={"col-sm-4"}>
+                <div className={"col-sm-5"}>
                     <h4>Traceability overview panel</h4>
                 </div>
-                <div className={"col-sm-7"}>
+                <div className={"col-sm-6"}>
                     <div className="input-group">
                         <div className="input-group-prepend">
                             <span className="input-group-text bg-light" id="basic-addon1"><i className="bi bi-search"></i></span>
