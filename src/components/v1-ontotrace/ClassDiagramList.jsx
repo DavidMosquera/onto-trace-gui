@@ -3,60 +3,115 @@ import {GetClassDiagramListItem} from "./ClassDiagramListItem";
 import {GetAPI} from "../common/Configuration";
 export function GetClassDiagramList({onSeeArtifact, canIChangeArtifact}){
     const projectId = localStorage.getItem("current-project");
+    const projectType = localStorage.getItem("current-project-type")
     const [classes, setClasses] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     useEffect(()=>{
         setIsLoading(true)
-        fetch(GetAPI()+"onto-trace-api/ontology-web-services/class-diagrams/id="+projectId, {mode: "cors"})
-            .then(res => res.json())
-            .then(
-                (data) => {
-                    if(Object.keys(data).length !== 0){
-                        const {_embedded:{sourceList}} = data
-                        let processedClasses = []
-                        sourceList.forEach((_class)=>{
-                            let processedClass = {
-                                individualURI: _class.individualURI,
-                                name:_class.individualURI.split("#")[1],
-                                attributes: [],
-                                operations: [],
-                                associations: []
-                            }
-                            _class.statements.forEach((statement) => {
-                                if(statement.match(/.*#hasAttribute.*/g)){
-                                    statement = statement.split(" ")[2].replaceAll(/<|>|\s|/g, "").slice(0,-1)
-                                    processedClass.attributes = [...processedClass.attributes, statement]
+        if(projectType==="us-umlclass"){
+            fetch(GetAPI()+"onto-trace-api/ontology-web-services/class-diagrams/id="+projectId, {mode: "cors"})
+                .then(res => res.json())
+                .then(
+                    (data) => {
+                        if(Object.keys(data).length !== 0){
+                            const {_embedded:{sourceList}} = data
+                            let processedClasses = []
+                            sourceList.forEach((_class)=>{
+                                let processedClass = {
+                                    individualURI: _class.individualURI,
+                                    name:_class.individualURI.split("#")[1],
+                                    attributes: [],
+                                    operations: [],
+                                    associations: []
                                 }
-                                if(statement.match(/.*#hasOperation.*/g)){
-                                    statement = statement.split(" ")[2].replaceAll(/<|>|\s|/g, "").slice(0,-1)
-                                    processedClass.operations = [...processedClass.operations, statement]
-                                }
-                                if(statement.match(/.*#hasClassAssociation.*/g)){
-                                    statement = statement.split(" ")[2].replaceAll(/<|>|\s|/g, "").slice(0,-1)
-                                    processedClass.associations = [...processedClass.associations, statement]
-                                }
+                                _class.statements.forEach((statement) => {
+                                    if(statement.match(/.*#hasAttribute.*/g)){
+                                        statement = statement.split(" ")[2].replaceAll(/<|>|\s|/g, "").slice(0,-1)
+                                        processedClass.attributes = [...processedClass.attributes, statement]
+                                    }
+                                    if(statement.match(/.*#hasOperation.*/g)){
+                                        statement = statement.split(" ")[2].replaceAll(/<|>|\s|/g, "").slice(0,-1)
+                                        processedClass.operations = [...processedClass.operations, statement]
+                                    }
+                                    if(statement.match(/.*#hasClassAssociation.*/g)){
+                                        statement = statement.split(" ")[2].replaceAll(/<|>|\s|/g, "").slice(0,-1)
+                                        processedClass.associations = [...processedClass.associations, statement]
+                                    }
+                                })
+                                processedClasses.push(processedClass)
                             })
-                            processedClasses.push(processedClass)
-                        })
-                        processedClasses.sort(function (a, b) {
-                            if (a.name > b.name) {
-                                return 1;
-                            }
-                            if (a.name > b.name) {
-                                return -1;
-                            }
-                            return 0;
-                        });
-                        setClasses(processedClasses)
+                            processedClasses.sort(function (a, b) {
+                                if (a.name > b.name) {
+                                    return 1;
+                                }
+                                if (a.name > b.name) {
+                                    return -1;
+                                }
+                                return 0;
+                            });
+                            setClasses(processedClasses)
+                        }
+                        setIsLoading(false)
+                    },
+                    (error) => {
+                        //TODO ERROR!!
+                        setIsLoading(false)
                     }
-                    setIsLoading(false)
-                },
-                (error) => {
-                    //TODO ERROR!!
-                    setIsLoading(false)
-                }
-            )
+                )
+        }
+        if(projectType==="us-edg"){
+            fetch(GetAPI()+"onto-trace-api/ontology-web-services/edg/id="+projectId, {mode: "cors"})
+                .then(res => res.json())
+                .then(
+                    (data) => {
+                        if(Object.keys(data).length !== 0){
+                            const {_embedded:{sourceList}} = data
+                            let processedClasses = []
+                            sourceList.forEach((_class)=>{
+                                let processedClass = {
+                                    individualURI: _class.individualURI,
+                                    name:_class.individualURI.split("#")[1],
+                                    attributes: [],
+                                    operations: [],
+                                    associations: []
+                                }
+                                _class.statements.forEach((statement) => {
+                                    if(statement.match(/.*#hasAttribute.*/g)){
+                                        statement = statement.split(" ")[2].replaceAll(/<|>|\s|/g, "").slice(0,-1)
+                                        processedClass.attributes = [...processedClass.attributes, statement]
+                                    }
+                                    if(statement.match(/.*#hasMethod.*/g)){
+                                        statement = statement.split(" ")[2].replaceAll(/<|>|\s|/g, "").slice(0,-1)
+                                        processedClass.operations = [...processedClass.operations, statement]
+                                    }
+                                    if(statement.match(/.*#hasObjectDependency.*/g)){
+                                        statement = statement.split(" ")[2].replaceAll(/<|>|\s|/g, "").slice(0,-1)
+                                        processedClass.associations = [...processedClass.associations, statement]
+                                    }
+                                })
+                                processedClasses.push(processedClass)
+                            })
+                            processedClasses.sort(function (a, b) {
+                                if (a.name > b.name) {
+                                    return 1;
+                                }
+                                if (a.name > b.name) {
+                                    return -1;
+                                }
+                                return 0;
+                            });
+                            setClasses(processedClasses)
+                        }
+                        setIsLoading(false)
+                    },
+                    (error) => {
+                        //TODO ERROR!!
+                        setIsLoading(false)
+                    }
+                )
+        }
     },[])
+
 
     if(isLoading){
         return (<div className={"row pt-1 ms-0 border border-info"} style={{height: "100%", maxWidth:"100%", overflow:"auto"}}>

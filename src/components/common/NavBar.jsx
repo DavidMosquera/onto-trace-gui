@@ -24,7 +24,7 @@ export function GetNavbar({projectMenu}){
                         <a className="nav-link">Currently working on: <strong>{projectName}</strong></a>
                     </li>}
                     {!projectMenu && <li className="nav-item">
-                        <a className="nav-link">Tracing: <strong>{projectType === "us-umlclass" && "User Stories and Class Diagrams"}</strong></a>
+                        <a className="nav-link">Tracing: <strong>{projectType === "us-umlclass" && "User Stories and Class Diagrams"}{projectType==="us-edg" && "User Stories and EDG"}</strong></a>
                     </li>}
                 </ul>
             </div>
