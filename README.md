@@ -1,5 +1,5 @@
 # OntoTraceV2.0 GUI
-This repository contains a public version of the OntoTraceV2.0 tool discussed in the paper "Ontology-based Automatic Reasoning and NLP for Tracing Software Requirements into Models with the OntoTrace Tool" submitted to the 29th International Working Conference on Requirement Engineering: Foundation for Software Quality will take place from the 17th to 20th of April 2023 in Barcelona, Catalunya, Spain. Especially, this repository contains the graphical user interface who consumes the Automatic reasoning NLP API. You can find such API [here](#).
+This repository contains a public version of the OntoTraceV2.0 tool discussed in the paper "Ontology-based Automatic Reasoning and NLP for Tracing Software Requirements into Models with the OntoTrace Tool" submitted to the 29th International Working Conference on Requirement Engineering: Foundation for Software Quality in Barcelona, Catalunya, Spain. Especially, this repository contains the graphical user interface who consumes the Automatic reasoning NLP API. You can find such API [here](#).
 
 # Getting Started with Create React App
 
