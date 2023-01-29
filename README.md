@@ -1,5 +1,9 @@
 # OntoTraceV2.0 GUI
-This repository contains a public version of the OntoTraceV2.0 tool discussed in the paper "Ontology-based Automatic Reasoning and NLP for Tracing Software Requirements into Models with the OntoTrace Tool" submitted to the 29th International Working Conference on Requirement Engineering: Foundation for Software Quality in Barcelona, Catalunya, Spain. Especially, this repository contains the graphical user interface who consumes the Automatic reasoning NLP API. You can find such API [here](#).
+This repository contains a public version of the OntoTraceV2.0 tool discussed in the paper "Ontology-based Automatic Reasoning and NLP for Tracing Software Requirements into Models with the OntoTrace Tool" submitted to the 29th International Working Conference on Requirement Engineering: Foundation for Software Quality in Barcelona, Catalunya, Spain. Especially, this repository contains the graphical user interface who consumes the Automatic reasoning NLP API. You can find such API [here](https://github.com/DavidMosquera/ontotrace-API).
+
+If you are willing to use OntoTraceV2.0, contact David Mosquera writing an email to mosq@zhaw.ch since a new version could be already developed.
+
+We are open to new collaborations! just write an email :).
 
 # Getting Started with Create React App
 
